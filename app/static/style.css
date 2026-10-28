@@ -561,3 +561,40 @@ body.cinema-mode .canvas { padding: 0; background-image: none; background-color:
 .trynow { justify-self: start; margin-top: 4px; padding: 5px 12px; border-radius: 8px; background: #222228; font-weight: 700; font-size: 12px; }
 .appcard:hover .trynow { background: var(--accent); color: var(--ink); }
 .tag.t-pro { background: #fff; color: #111; } .tag.t-trending { background: #ff7a59; color: #111; }
+
+/* VTComfy studio theme: warm paper canvas with graphite chrome. */
+:root {
+  color-scheme: light;
+  --chrome: #f0eee8;
+  --bg: #faf9f5;
+  --panel: #ffffff;
+  --panel-2: #f2f0ea;
+  --field: #ffffff;
+  --node: #ffffff;
+  --node-title: #ebe8e0;
+  --ink: #182027;
+  --line: rgba(24, 32, 39, .13);
+  --line-2: rgba(24, 32, 39, .25);
+  --text: #20272d;
+  --muted: #68727a;
+  --accent: #a5bd2d;
+  --accent-2: #d8e990;
+}
+body { background: var(--chrome); }
+.top, #rail { background: var(--chrome); }
+.canvas { background-color: var(--bg); background-image: radial-gradient(circle, rgba(32, 39, 45, .07) 1px, transparent 1.3px); }
+.topnav .navlink:hover, .navitem:focus-within .navlink, .search, .credits,
+.ritem:hover, .ritem .ico, .fpill, .seg, .panel, .modelbtn, .field.prompt,
+.opts button, .chipctl, .mini, .libbtn, .ustat, .trynow { background: var(--panel); }
+.ritem[aria-current="page"] { background: #e4e6d6; }
+.seg button[aria-pressed="true"] { background: #e2e6d2; }
+.panel, .field.prompt, textarea, .panel select, .panel input[type="number"] { color: var(--text); }
+.ghost { border-color: var(--line-2); }
+.hero { background: linear-gradient(135deg, #dfe8b9, #f3f0e8); }
+.hero::after { background: linear-gradient(90deg, rgba(24, 32, 39, .78) 10%, rgba(24, 32, 39, .16) 62%, transparent), linear-gradient(transparent 55%, rgba(24, 32, 39, .35)); }
+.htext p { color: #eef0ea; }
+.card::after, .pcard::after { background: linear-gradient(transparent 45%, rgba(24, 32, 39, .7)); }
+.card .ckind, .appkind { background: rgba(24, 32, 39, .68); }
+.utile { border-color: rgba(24, 32, 39, .25); background: var(--panel-2); }
+.appglyph { color: rgba(24, 32, 39, .7); text-shadow: 0 6px 30px rgba(255, 255, 255, .65); }
+.topnav .navlink[aria-current="page"], .back:hover, .more:hover { color: #748c14; }
