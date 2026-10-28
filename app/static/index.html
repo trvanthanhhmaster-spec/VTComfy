@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0c0c0e">
+<title>VTComfy</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23d1fe17'/%3E%3Ccircle cx='10' cy='11' r='3.2' fill='%23111'/%3E%3Ccircle cx='22' cy='21' r='3.2' fill='%23111'/%3E%3Cpath d='M10 11C18 11 14 21 22 21' stroke='%23111' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="/static/style.css?v=39">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/" aria-label="VTComfy home">
+    <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9"/><circle cx="10" cy="11" r="3.2"/><circle cx="22" cy="21" r="3.2"/><path d="M10 11C18 11 14 21 22 21"/></svg>
+    <span>VT<b>COMFY</b></span>
+  </a>
+  <nav id="topnav" class="topnav" aria-label="Main"></nav>
+  <div class="topright">
+    <label class="search">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
+      <input id="search" type="search" placeholder="Search tools and models" aria-label="Search tools and models" autocomplete="off">
+    </label>
+    <span id="mode" class="chip"></span>
+    <a class="credits" href="#/usage" title="Credits and usage: partner models spend your Comfy credits">✦ Credits</a>
+    <a id="gentoggle" class="gens" href="#/generations">Generations <b id="qcount" hidden>0</b></a>
+  </div>
+</header>
+<div class="shell">
+  <main id="main" class="canvas" tabindex="-1"></main>
+</div>
+<script src="/static/hub.js?v=39"></script>
+<script src="/static/cinema.js?v=39"></script>
+<script src="/static/app.js?v=39"></script>
+</body>
+</html>
