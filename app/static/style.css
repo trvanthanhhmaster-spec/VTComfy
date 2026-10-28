@@ -591,8 +591,8 @@ body { background: var(--chrome); }
 .panel, .field.prompt, textarea, .panel select, .panel input[type="number"] { color: var(--text); }
 .ghost { border-color: var(--line-2); }
 .hero { background: linear-gradient(135deg, #dfe8b9, #f3f0e8); }
-.hero::after { background: linear-gradient(90deg, rgba(24, 32, 39, .78) 10%, rgba(24, 32, 39, .16) 62%, transparent), linear-gradient(transparent 55%, rgba(24, 32, 39, .35)); }
-.htext p { color: #eef0ea; }
+.hero::after { background: linear-gradient(90deg, rgba(250, 249, 245, .9) 8%, rgba(250, 249, 245, .34) 62%, transparent), linear-gradient(transparent 55%, rgba(250, 249, 245, .18)); }
+.htext p { color: var(--text); }
 .card::after, .pcard::after { background: linear-gradient(transparent 45%, rgba(24, 32, 39, .7)); }
 .card .ckind, .appkind { background: rgba(24, 32, 39, .68); }
 .utile { border-color: rgba(24, 32, 39, .25); background: var(--panel-2); }

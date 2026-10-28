@@ -45,7 +45,7 @@ function md(src) {
 function hubNav(active) {
   return h("div", { class: "hubnav" }, h("a", { class: "hublogo", href: "#/blog" }, "CREATOR HUB"),
     h("nav", {}, ...[["#/blog", "Blog", "blog"], ["#/blog/first-video-seedance", "Get started", "start"], ["#/blog/changelog-oct-22", "Changelog", "log"],
-      ["https://github.com/codyclack/VTComfy", "GitHub", "gh"]].map(([href, l, k]) => h("a", { href, "aria-current": active === k ? "page" : null,
+      ["https://github.com/trvanthanhhmaster-spec/VTComfy", "GitHub", "gh"]].map(([href, l, k]) => h("a", { href, "aria-current": active === k ? "page" : null,
       target: href.startsWith("http") ? "_blank" : null, rel: href.startsWith("http") ? "noopener" : null }, l))));
 }
 const postMeta = (p) => h("span", { class: "pmeta" }, h("span", { class: "ptag" }, p.category || "Post"), h("small", {}, `${p.minutes} min · ${p.date}`));
@@ -119,7 +119,7 @@ function siteFooter() {
       m("model.bytedance-seedream-5-0-pro-t2i", "Seedream 5"), m("model.ideogram-v4-5-t2i", "Ideogram 4.5"), m("soul.t2i", "Z-Image (open)")]),
     col("Studios", [["Cinema Studio", "#/cinema"], ["Genjutsu", "#/s/Genjutsu"], ["Viral Hub", "#/s/Viral Hub"], ["Marketing Studio", "#/s/Marketing"], ["Soul", "#/s/Soul"], ["Match Cut", "#/s/Match Cut + Tracelab"]]),
     col("Resources", [["Blog", "#/blog"], ["Get started", "#/blog/first-video-seedance"], ["Changelog", "#/blog/changelog-oct-22"], ["Community", "#/community"], ["Credits & usage", "#/usage"],
-      ["GitHub", "https://github.com/codyclack/VTComfy"], ["Coverage", "https://github.com/codyclack/VTComfy/blob/main/COVERAGE.md"]]),
+      ["GitHub", "https://github.com/trvanthanhhmaster-spec/VTComfy"], ["Source", "https://github.com/trvanthanhhmaster-spec/VTComfy/tree/main/app/static"]]),
     h("div", { class: "fbottom" }, h("small", {}, "VTComfy is an independent open-source project for Comfy's #OpenSourceHiggsfield challenge. Not affiliated with Higgsfield AI.")));
 }
 

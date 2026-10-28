@@ -20,6 +20,10 @@ python3 -m http.server 8765 --directory app/static
 
 Then open <http://127.0.0.1:8765>.
 
+You can also double-click `app/static/index.html`; it runs in demo mode without
+ComfyUI and generates local placeholder results so the interface can be tested
+before the real inference backend is connected.
+
 ## Attribution
 
 The initial interface layer is adapted from

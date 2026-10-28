@@ -48,12 +48,46 @@ const svgEl = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag)
 const badge = (text, cls = "") => h("span", { class: `badge ${cls}` }, text);
 const sock = (kind, cls = "") => h("i", { class: `sock ${cls}`, style: `--k:${KIND[kind] || KIND.widget}` });
 const marker = (text) => h("h1", { class: "marker" }, h("span", {}, text));
-const api = async (path, opts) => {
-  const r = await fetch(path, opts);
-  if (r.status === 204) return null;
-  const body = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(body.detail || `${r.status} ${r.statusText}`);
-  return body;
+const DEMO_FEATURES = [
+  { id: "vt.image.create", name: "Create image", group: "Text to image", studio: "Image models", output_kind: "image", track: "open", status: "tested", engine: "Open weights", cost: 0, inputs: [{ name: "prompt", label: "Prompt", kind: "text", default: "", required: true }, { name: "aspect", label: "Aspect", kind: "choice", options: ["16:9", "9:16", "1:1"], default: "16:9" }] },
+  { id: "vt.image.edit", name: "Edit image", group: "Image edit", studio: "Image tools", output_kind: "image", track: "open", status: "tested", engine: "Qwen Image Edit", cost: 0, inputs: [{ name: "image", label: "Image", kind: "image", required: true }, { name: "prompt", label: "Prompt", kind: "text", default: "", required: true }] },
+  { id: "vt.video.create", name: "Create video", group: "Image to video", studio: "Video models", output_kind: "video", track: "open", status: "built", engine: "LTX-2.5", cost: 0, inputs: [{ name: "start_image", label: "Start frame", kind: "image", required: true }, { name: "prompt", label: "Prompt", kind: "text", default: "", required: true }, { name: "duration", label: "Duration", kind: "choice", options: ["3s", "5s", "8s"], default: "5s" }] },
+  { id: "vt.cinema.shot", name: "Cinema shot", group: "Text to video", studio: "Cinema Studio", output_kind: "video", track: "open", status: "built", engine: "LTX-2.5", cost: 0, inputs: [{ name: "prompt", label: "Scene", kind: "text", default: "", required: true }, { name: "aspect", label: "Aspect", kind: "choice", options: ["16:9", "9:16", "1:1"], default: "16:9" }] },
+  { id: "vt.image.upscale", name: "Upscale image", group: "Image upscale", studio: "Image tools", output_kind: "image", track: "open", status: "tested", engine: "SeedVR2", cost: 0, inputs: [{ name: "image", label: "Image", kind: "image", required: true }, { name: "scale", label: "Scale", kind: "choice", options: ["2x", "4x"], default: "2x" }] },
+];
+const DEMO_CONFIG = { mode: "mock", studios: ["Image models", "Image tools", "Video models", "Cinema Studio"] };
+const DEMO_JOBS = [];
+const demoSvg = (label) => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720"><rect width="100%" height="100%" fill="#e5ebc6"/><circle cx="1030" cy="120" r="240" fill="#b6c85a" opacity=".55"/><text x="72" y="280" font-family="Arial" font-size="56" font-weight="700" fill="#20272d">${label}</text><text x="72" y="340" font-family="Arial" font-size="24" fill="#68727a">VTComfy demo mode</text></svg>`)}`;
+const demoApi = async (path, opts = {}) => {
+  if (path === "/api/config") return DEMO_CONFIG;
+  if (path === "/api/features") return DEMO_FEATURES;
+  if (path === "/api/jobs") {
+    if (opts.method === "POST") {
+      let body = {}; try { body = JSON.parse(opts.body || "{}"); } catch { /* demo */ }
+      const f = DEMO_FEATURES.find((x) => x.id === body.feature_id) || DEMO_FEATURES[0];
+      const job = { id: `demo-${Date.now()}`, feature_id: f.id, feature_name: f.name, status: "done", created: Date.now() / 1000, inputs: body.inputs || {}, output: demoSvg(f.name) };
+      DEMO_JOBS.unshift(job); return job;
+    }
+    return DEMO_JOBS;
+  }
+  if (path === "/api/assets") return { types: ["Character", "Product", "Style"], items: [] };
+  if (path === "/api/projects") return [];
+  if (path === "/api/apps") return { categories: ["Image", "Video"], apps: [] };
+  if (path === "/api/blog") return [];
+  if (path.startsWith("/api/jobs/")) return DEMO_JOBS.find((j) => path.endsWith(j.id)) || null;
+  throw new Error("Demo mode does not provide this endpoint yet.");
+};
+const api = async (path, opts = {}) => {
+  try {
+    const r = await fetch(path, opts);
+    if (r.status === 204) return null;
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(body.detail || `${r.status} ${r.statusText}`);
+    return body;
+  } catch (error) {
+    if (path.startsWith("/api/")) return demoApi(path, opts);
+    throw error;
+  }
 };
 const json = (method, body) => ({ method, headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
 
@@ -94,7 +128,7 @@ function collapse(list) {
 
 /* ---------------- media ---------------- */
 function exampleEl(url, cls, opts = {}) {
-  const src = url.startsWith("/") ? url : "/" + url;
+  const src = url.startsWith("/") || url.startsWith("data:") ? url : "/" + url;
   if (isAudio(src)) return h("audio", { src, controls: true, preload: "none" });
   if (/\.(glb|gltf)$/i.test(src)) return h("a", { class: "st", href: src, download: "" }, `Download 3D model (${src.split("/").pop()})`);
   if (/\.html$/i.test(src)) return h("div", { class: `htmlprev ${cls || ""}` }, h("iframe", { src, loading: "lazy", title: "Website preview", sandbox: "allow-same-origin" }),
@@ -198,8 +232,8 @@ function explore() {
     h("span", { class: "fico" }, ico), h("span", { class: "ftext" }, h("b", {}, t, tag && h("span", { class: `tag t-${tag.toLowerCase()}` }, tag)), h("small", {}, sub))));
   const promoArt = exOf("marketing.click-to-ad") || exOf("cinema.camera-rig");
   const promo = h("div", { class: "promo" }, promoArt && exampleEl(promoArt, "bg", { autoplay: true }),
-    h("div", { class: "ptext2" }, h("h2", {}, "Every Higgsfield tool,", h("br"), h("span", {}, "on ComfyUI")),
-      h("ul", {}, h("li", {}, "Seedance 2.5, Kling, Nano Banana, GPT Image"), h("li", {}, "Open-weight LTX, Wan and Qwen workflows"), h("li", {}, `${state.feats.length} tools and apps`)),
+    h("div", { class: "ptext2" }, h("h2", {}, "VTComfy creative studio,", h("br"), h("span", {}, "built around ComfyUI")),
+      h("ul", {}, h("li", {}, "Image, video and Cinema Studio workspaces"), h("li", {}, "Open-weight workflows with a simple model picker"), h("li", {}, `${state.feats.length} demo tools ready to try`)),
       h("a", { class: "go", href: "#/w/video/0" }, "Start creating")));
   return [banners, h("section", { class: "promogrid" }, promo, h("div", { class: "ftiles" }, tiles))];
 }
