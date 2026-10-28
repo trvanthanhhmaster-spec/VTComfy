@@ -65,7 +65,7 @@ const demoApi = async (path, opts = {}) => {
     if (opts.method === "POST") {
       let body = {}; try { body = JSON.parse(opts.body || "{}"); } catch { /* demo */ }
       const f = DEMO_FEATURES.find((x) => x.id === body.feature_id) || DEMO_FEATURES[0];
-      const job = { id: `demo-${Date.now()}`, feature_id: f.id, feature_name: f.name, status: "done", created: Date.now() / 1000, inputs: body.inputs || {}, output: demoSvg(f.name) };
+      const job = { id: `demo-${Date.now()}`, feature_id: f.id, feature_name: f.name, kind: f.output_kind, status: "done", created: Date.now() / 1000, inputs: body.inputs || {}, outputs: [{ kind: f.output_kind, url: demoSvg(f.name), name: `${f.id}.svg` }] };
       DEMO_JOBS.unshift(job); return job;
     }
     return DEMO_JOBS;
